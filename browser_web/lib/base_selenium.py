@@ -1,7 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-import time
 
 # driver_path = "/home/caonguyen/driver/chromedriver"
 service = Service("/home/caonguyen/driver/chromedriver")
@@ -34,16 +35,16 @@ class BaseSelenium():
         return driver
     
     def get_element(self, element_type, element):
-        time.sleep(1)
+        WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((element_type, element)))
         element = self.driver.find_element(element_type, element)
         return element.text
     
     def login(self, element_type, uname, pwd, idn, idp):
         self.driver.find_element(element_type, idn).send_keys(uname)
         self.driver.find_element(element_type, idp).send_keys(pwd + Keys.ENTER)
-        time.sleep(3)
         return 0
 
     def click_element(self, element_type, element):
+         WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((element_type, element)))
          self.driver.find_element(element_type, element).click()
          return 0
